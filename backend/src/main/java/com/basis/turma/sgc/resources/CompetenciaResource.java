@@ -3,6 +3,7 @@ package com.basis.turma.sgc.resources;
 import com.basis.turma.sgc.domain.Competencia;
 import com.basis.turma.sgc.service.dto.CompetenciaDTO;
 import com.basis.turma.sgc.service.CompetenciaService;
+import com.basis.turma.sgc.service.dto.CompetenciaListaDTO;
 import com.basis.turma.sgc.service.dto.TurmaFormacaoDTO;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,15 +23,15 @@ public class CompetenciaResource {
     private final CompetenciaService service;
 
     @GetMapping
-    public ResponseEntity<List<CompetenciaDTO>> listar(){
-        List<CompetenciaDTO> competenciaDTO = service.listar();
-        return ResponseEntity.ok(competenciaDTO);
+    public ResponseEntity<List<CompetenciaListaDTO>> listar(){
+        List<CompetenciaListaDTO> competenciaListaDTO = service.listar();
+        return ResponseEntity.ok(competenciaListaDTO);
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<CompetenciaDTO> buscarId(@PathVariable Long id){
-        CompetenciaDTO competenciaDTO = service.buscarPorId(id);
-        return ResponseEntity.ok().body(competenciaDTO);
+    public ResponseEntity<CompetenciaListaDTO> buscarId(@PathVariable Long id){
+        CompetenciaListaDTO competenciaListaDTO = service.buscarPorId(id);
+        return ResponseEntity.ok().body(competenciaListaDTO);
     }
 
     @PostMapping

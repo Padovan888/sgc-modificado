@@ -2,9 +2,11 @@ package com.basis.turma.sgc.service;
 
 import com.basis.turma.sgc.domain.*;
 import com.basis.turma.sgc.repository.ColaboradorCompetenciaRepository;
+import com.basis.turma.sgc.repository.StatusRepository;
 import com.basis.turma.sgc.repository.TurmaFormacaoCompetenciaColaboradorRepository;
 import com.basis.turma.sgc.repository.TurmaFormacaoRepository;
 import com.basis.turma.sgc.resources.exception.RegraNegocioException;
+import com.basis.turma.sgc.service.dto.DropDownDTO;
 import com.basis.turma.sgc.service.dto.TurmaFormacaoDTO;
 import com.basis.turma.sgc.service.dto.TurmaFormacaoListaDTO;
 import com.basis.turma.sgc.service.mapper.TurmaFormacaoListaMapper;
@@ -27,6 +29,7 @@ public class TurmaFormacaoService {
     private final TurmaFormacaoMapper mapper;
     private final TurmaFormacaoListaMapper mapperLista;
     private final TurmaFormacaoCompetenciaColaboradorRepository turmaFormacaoCompetenciaColaboradorRepository;
+    private final StatusRepository statusRepository;
 
     public List<TurmaFormacaoListaDTO> listar(){
         return mapperLista.toDTO(turmaFormacaoRepository.findAll());
@@ -127,6 +130,10 @@ public class TurmaFormacaoService {
                 turmaFormacaoRepository.save(turmaFormacao);
             }
         }
+    }
+
+    public List<DropDownDTO> listarStatusComoDropDown(){
+        return statusRepository.findAllByDropDown();
     }
 
 

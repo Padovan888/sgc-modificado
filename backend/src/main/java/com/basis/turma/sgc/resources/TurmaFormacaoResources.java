@@ -1,5 +1,6 @@
 package com.basis.turma.sgc.resources;
 
+import com.basis.turma.sgc.service.dto.DropDownDTO;
 import com.basis.turma.sgc.service.dto.TurmaFormacaoDTO;
 import com.basis.turma.sgc.service.dto.TurmaFormacaoListaDTO;
 import com.basis.turma.sgc.service.mapper.TurmaFormacaoMapper;
@@ -47,6 +48,11 @@ public class TurmaFormacaoResources {
     public ResponseEntity deletar(@PathVariable Long id){
         turmaFormacaoService.deletar(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Turma de formação deletada!");
+    }
+
+    @GetMapping("/status/dropdown")
+    public ResponseEntity<List<DropDownDTO>> listarStatusDropDown(){
+        return new ResponseEntity<>(turmaFormacaoService.listarStatusComoDropDown(),HttpStatus.OK);
     }
 
 }
