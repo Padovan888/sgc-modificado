@@ -1,3 +1,4 @@
+import { SelectItem } from 'primeng/api';
 import { CategoriaModel } from './../models/categoria.model';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
@@ -17,5 +18,8 @@ export class CategoriaService {
         return this.http.get<CategoriaModel[]>( this.UrlService + "/categoria" )
     }
 
+    public getCategoriasDropDown(): Observable<SelectItem[]>{
+        return this.http.get<SelectItem[]>(this.UrlService + "/categoria/dropdown")
+    }
 
 }

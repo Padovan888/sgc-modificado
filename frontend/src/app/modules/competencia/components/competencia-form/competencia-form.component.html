@@ -11,7 +11,24 @@
                 formControlName="nome"
                 required
             />
-            <small *ngIf="compForm.get('nome').invalid && compForm.get('nome').touched" class="text-danger">Nome é obrigatório!</small>
+            <small
+                *ngIf="
+                    compForm.get('nome').errors &&
+                    compForm.get('nome').hasError('required') &&
+                    compForm.get('nome').touched
+                "
+                class="text-danger"
+                >Nome é obrigatório!</small
+            >
+            <small
+                *ngIf="
+                    compForm.get('nome').errors &&
+                    compForm.get('nome').hasError('minlength') &&
+                    compForm.get('nome').touched
+                "
+                class="text-danger"
+                >Deve possuir no mínimo 3 caracteres!</small
+            >
         </div>
 
         <div class="field col-12 md:col-12">
@@ -19,17 +36,24 @@
             <textarea
                 rows="6"
                 cols="30"
-                class="inputfield w-full "
+                class="inputfield w-full"
                 pInputTextarea
                 formControlName="descricao"
             ></textarea>
-            <small *ngIf="compForm.get('descricao').invalid && compForm.get('descricao').touched" class="text-danger">A descrição é obrigatória!</small>
+            <small
+                *ngIf="
+                    compForm.get('descricao').invalid &&
+                    compForm.get('descricao').touched
+                "
+                class="text-danger"
+                >A descrição é obrigatória!</small
+            >
         </div>
 
         <div class="field col-12 md:col-12">
             <label>Categoria *</label>
             <p-dropdown
-                [options]="categoriasTeste"
+                [options]="categorias"
                 formControlName="idCategoria"
                 placeholder="Selecione a categoria"
                 styleClass="w-full dropborda col-12 md:col-6"
@@ -37,7 +61,14 @@
                 scrollHeight="150px"
             >
             </p-dropdown>
-            <small *ngIf="compForm.get('idCategoria').invalid && compForm.get('idCategoria').touched" class="text-danger">A categoria é obrigatória!</small>
+            <small
+                *ngIf="
+                    compForm.get('idCategoria').invalid &&
+                    compForm.get('idCategoria').touched
+                "
+                class="text-danger"
+                >A categoria é obrigatória!</small
+            >
 
             <!-- {{compForm.getRawValue() | json}} <br> -->
         </div>

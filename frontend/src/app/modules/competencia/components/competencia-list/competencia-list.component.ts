@@ -1,11 +1,8 @@
-import { ConfirmationService, Message, MessageService } from 'primeng/api';
-import {ConfirmDialogModule} from 'primeng/confirmdialog';
+import { CompetenciaListaModel } from "./../../models/competencia-lista.model";
+import { ConfirmationService, Message, MessageService } from "primeng/api";
 import { CompetenciaModel } from "./../../models/competencia.model";
 import { CompetenciaService } from "../../services/competencia.service";
-import {
-    Component,
-    OnInit
-} from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 
 @Component({
     selector: "app-competencia-list",
@@ -13,14 +10,16 @@ import {
     styleUrls: ["./competencia-list.component.css"],
 })
 export class CompetenciaListComponent implements OnInit {
-    msgs: Message[] = [];
     cols: any[];
-    competencias: CompetenciaModel[];
+    competencias: CompetenciaListaModel[];
     display: boolean = false;
     competenciaEditada: CompetenciaModel;
 
-    constructor(private competenciaService: CompetenciaService,
-        private messageService: MessageService) {}
+    constructor(
+        private competenciaService: CompetenciaService,
+        private messageService: MessageService,
+        private confirmationService: ConfirmationService
+    ) {}
 
     ngOnInit(): void {
         this.getCompetencias();
@@ -65,20 +64,31 @@ export class CompetenciaListComponent implements OnInit {
     public excluirCompetencia(id: number) {
         this.competenciaService.deleteCompetencia(id).subscribe(
             () => {
-                this.showMessageSuccess()
+                this.messageService.add({
+                    severity: "success",
+                    summary: "Confirmação",
+                    detail: "Competência excluída com sucesso!",
+                });
                 this.getCompetencias();
             },
             () => {
-                this.showMessageError()
+                this.messageService.add({
+                    severity: "error",
+                    summary: "Exclusão não realizada",
+                    detail: "Verifique se a competência está associada a um colaborador",
+                });
             }
         );
     }
 
-    showMessageSuccess() {
-        this.messageService.add({severity:'success', summary: 'Competência excluída com sucesso', detail:''});
+    confirmarExclusao(id: number) {
+        this.confirmationService.confirm({
+            message: "Você deseja continuar com o processo?",
+            header: "Confirmação",
+            icon: "pi pi-exclamation-triangle",
+            accept: () => {
+                this.excluirCompetencia(id);
+            },
+        });
     }
-    showMessageError() {
-        this.messageService.add({severity:'error', summary: 'Falha ao excluir competência', detail:'Verifique se a competência está associada a algum colaborador'});
-    }
-
 }

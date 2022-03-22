@@ -39,16 +39,13 @@ public class CompetenciaService {
     }
 
     public CompetenciaDTO criar(CompetenciaDTO competenciaDTO){
-        if(!competenciaRepository.findAllByNome(competenciaDTO.getNome()).isEmpty()){
-            throw new RegraNegocioException("A competência de nome " + competenciaDTO.getNome() + " já existe no sistema!");
-        }
         Competencia competencia = competenciaMapper.toEntity(competenciaDTO);
         return competenciaMapper.toDTO(competenciaRepository.save(competencia));
     }
 
     public CompetenciaDTO atualizar(Long id, CompetenciaDTO competenciaDTO){
-        if(!competenciaRepository.findAllByNome(competenciaDTO.getNome()).isEmpty()){
-            throw new RegraNegocioException("A competência de nome " + competenciaDTO.getNome() + " já existe no sistema!");
+        if(!competenciaRepository.existsById(id)){
+            throw new RegraNegocioException("A competência de id " + id.toString() + " não existe!");
         }
         Competencia competencia = competenciaMapper.toEntity(competenciaDTO);
         competencia.setId(id);

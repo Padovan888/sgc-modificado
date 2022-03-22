@@ -16,8 +16,7 @@ import { EventEmitter } from "@angular/core";
 })
 export class CompetenciaFormComponent implements OnInit {
     public compForm: FormGroup;
-    categorias: CategoriaModel[] = [];
-    categoriasTeste: SelectItem[] = [];
+    categorias: SelectItem[] = [];
     titleModal = true;
 
     @Input() display = false;
@@ -36,7 +35,7 @@ export class CompetenciaFormComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
-        this.getCategorias();
+        this.getCategoriasDropDown();
         this.compForm = this.fb.group({
             id: [null],
             nome: ["", [Validators.required, Validators.minLength(3), Validators.maxLength(55)]],
@@ -62,15 +61,22 @@ export class CompetenciaFormComponent implements OnInit {
         this.finalizarRequisicao(
             this.rest.postCompetencia(this.compForm.getRawValue())
         );
-        this.showMessageCriar()
-
+        this.messageService.add({
+            severity:"success",
+            summary:"Confirmação",
+            detail:"Competência criada com sucesso!"
+        })
     }
 
     updateCompetencia() {
         this.finalizarRequisicao(
             this.rest.putCompetencia(this.compForm.getRawValue())
         );
-        this.showMessageEditar()
+        this.messageService.add({
+            severity:"success",
+            summary:"Confirmação",
+            detail:"Competência atualizada com sucesso!"
+        })
     }
 
     finalizarRequisicao(observable: Observable<CompetenciaModel>) {
@@ -80,29 +86,15 @@ export class CompetenciaFormComponent implements OnInit {
         });
     }
 
-    public getCategorias() {
-        this.categoriaService.getCategorias().subscribe(
+    public getCategoriasDropDown(){
+        this.categoriaService.getCategoriasDropDown().subscribe(
             (data) => {
-                this.categoriasTeste = this.converterParaDropDown(data, 'id', 'descricao');
+                this.categorias = data;
             },
             (error) => {
                 console.log("Erro", error);
             }
         );
-    }
-
-    showMessageEditar() {
-        this.messageService.add({severity:'success', summary: 'Competência editada com sucesso!', detail:''});
-    }
-    showMessageCriar() {
-        this.messageService.add({severity:'success', summary: 'Competência criada com sucesso!', detail:''});
-    }
-
-    converterParaDropDown(n: any[], valor: string, nome: string): SelectItem[] {
-        return n.map((item: any) => ({
-            value: item[valor],
-            label: item[nome],
-        }));
     }
 
     fecharModal() {

@@ -2,6 +2,7 @@ package com.basis.turma.sgc.resources;
 
 import com.basis.turma.sgc.service.dto.CategoriaDTO;
 import com.basis.turma.sgc.service.CategoriaService;
+import com.basis.turma.sgc.service.dto.DropDownDTO;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +20,12 @@ public class CategoriaResource {
     public ResponseEntity<List<CategoriaDTO>> listar(){
         List<CategoriaDTO> categoriaDTO = service.listar();
         return ResponseEntity.ok(categoriaDTO);
+    }
+
+    @GetMapping("/dropdown")
+    public ResponseEntity<List<DropDownDTO>> listarCategoriaDropDown(){
+        List<DropDownDTO> dropDownDTO = service.listarCategoriaComoDropDown();
+        return ResponseEntity.ok().body(dropDownDTO);
     }
 
 }
