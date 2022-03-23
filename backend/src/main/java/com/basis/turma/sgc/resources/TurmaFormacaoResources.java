@@ -1,5 +1,6 @@
 package com.basis.turma.sgc.resources;
 
+import com.basis.turma.sgc.service.dto.CompetenciaColaboradorDTO;
 import com.basis.turma.sgc.service.dto.DropDownDTO;
 import com.basis.turma.sgc.service.dto.TurmaFormacaoDTO;
 import com.basis.turma.sgc.service.dto.TurmaFormacaoListaDTO;
@@ -53,6 +54,12 @@ public class TurmaFormacaoResources {
     @GetMapping("/status/dropdown")
     public ResponseEntity<List<DropDownDTO>> listarStatusDropDown(){
         return new ResponseEntity<>(turmaFormacaoService.listarStatusComoDropDown(),HttpStatus.OK);
+    }
+
+    @GetMapping("/lista/{idColaborador}/{idCompetencia}")
+    public ResponseEntity<List<CompetenciaColaboradorDTO>> listarCompetenciaColaborador(@PathVariable Long idColaborador, @PathVariable Long idCompetencia){
+        List<CompetenciaColaboradorDTO> competenciaColaboradorDTO = turmaFormacaoService.listarCompetenciaColaborador(idColaborador, idCompetencia);
+        return ResponseEntity.ok().body(competenciaColaboradorDTO);
     }
 
 }

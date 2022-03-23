@@ -1,3 +1,4 @@
+import { CompetenciaColaboradorModel } from "./../../models/competencia-colaborador.model";
 import { TurmaFormacaoService } from "./../../services/turma-formacao.service";
 import { TurmaFormacaoModel } from "./../../models/turma-formacao.model";
 import { Component, OnInit } from "@angular/core";
@@ -14,9 +15,12 @@ export class TurmaFormacaoListComponent implements OnInit {
     display: boolean = false;
     turmaFormacaoEditada: TurmaFormacaoModel;
     isVisualizar: boolean = false;
+    competenciaColaborador: CompetenciaColaboradorModel[] = [];
 
-    constructor(private turmaFormacaoService: TurmaFormacaoService,
-        private messageService: MessageService) {}
+    constructor(
+        private turmaFormacaoService: TurmaFormacaoService,
+        private messageService: MessageService
+    ) {}
 
     ngOnInit(): void {
         this.getTurmaFormacao();
@@ -44,6 +48,22 @@ export class TurmaFormacaoListComponent implements OnInit {
         );
     }
 
+    public listarCompetenciaColaborador(
+        idColaborador: number,
+        idCompetencia: number
+    ) {
+        this.turmaFormacaoService
+            .listarCompetenciaColaborador(idColaborador, idCompetencia)
+            .subscribe(
+                (data) => {
+                    this.competenciaColaborador = data;
+                },
+                (error) => {
+                    console.log("Erro", error);
+                }
+            );
+    }
+
     public editarTurmaFormacao(turmaFormacao: TurmaFormacaoModel) {
         turmaFormacao.dataInicio = new Date(turmaFormacao.dataInicio);
         turmaFormacao.dataTermino = new Date(turmaFormacao.dataTermino);
@@ -63,10 +83,18 @@ export class TurmaFormacaoListComponent implements OnInit {
     }
 
     showMessageSuccess() {
-        this.messageService.add({severity:'success', summary: 'Turma de formação excluída com sucesso!', detail:''});
+        this.messageService.add({
+            severity: "success",
+            summary: "Turma de formação excluída com sucesso!",
+            detail: "",
+        });
     }
     showMessageError() {
-        this.messageService.add({severity:'error', summary: 'Falha ao excluir turma de formação', detail:'Verifique se há colaboradores vinculados'});
+        this.messageService.add({
+            severity: "error",
+            summary: "Falha ao excluir turma de formação",
+            detail: "Verifique se há colaboradores vinculados",
+        });
     }
 
     public atualizarTurmasFormacao(event) {

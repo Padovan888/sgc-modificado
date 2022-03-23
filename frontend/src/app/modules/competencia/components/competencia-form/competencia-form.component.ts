@@ -25,7 +25,6 @@ export class CompetenciaFormComponent implements OnInit {
     @Output() refreshCompetencias = new EventEmitter();
     @Output() aoFechar = new EventEmitter();
 
-
     constructor(
         private fb: FormBuilder,
         private rest: CompetenciaService,
@@ -38,8 +37,22 @@ export class CompetenciaFormComponent implements OnInit {
         this.getCategoriasDropDown();
         this.compForm = this.fb.group({
             id: [null],
-            nome: ["", [Validators.required, Validators.minLength(3), Validators.maxLength(55)]],
-            descricao: ["", [Validators.required, Validators.minLength(3), Validators.maxLength(255)]],
+            nome: [
+                "",
+                [
+                    Validators.required,
+                    Validators.minLength(3),
+                    Validators.maxLength(55),
+                ],
+            ],
+            descricao: [
+                "",
+                [
+                    Validators.required,
+                    Validators.minLength(3),
+                    Validators.maxLength(255),
+                ],
+            ],
             idCategoria: ["", [Validators.required]],
         });
         if (!!this.competenciaEditada) {
@@ -61,32 +74,37 @@ export class CompetenciaFormComponent implements OnInit {
         this.finalizarRequisicao(
             this.rest.postCompetencia(this.compForm.getRawValue())
         );
-        this.messageService.add({
-            severity:"success",
-            summary:"Confirmação",
-            detail:"Competência criada com sucesso!"
-        })
+        // this.messageService.add({
+        //     severity:"success",
+        //     summary:"Confirmação",
+        //     detail:"Competência criada com sucesso!"
+        // })
     }
 
     updateCompetencia() {
         this.finalizarRequisicao(
             this.rest.putCompetencia(this.compForm.getRawValue())
         );
-        this.messageService.add({
-            severity:"success",
-            summary:"Confirmação",
-            detail:"Competência atualizada com sucesso!"
-        })
+        // this.messageService.add({
+        //     severity:"success",
+        //     summary:"Confirmação",
+        //     detail:"Competência atualizada com sucesso!"
+        // })
     }
 
     finalizarRequisicao(observable: Observable<CompetenciaModel>) {
-        observable.subscribe((result) => {
-            this.refreshCompetencias.emit();
-            this.fecharModal();
-        });
+        observable.subscribe(
+            (result) => {
+                this.refreshCompetencias.emit();
+                this.fecharModal();
+            },
+            (error) => {
+                console.log("Erro: ", error.error);
+            }
+        );
     }
 
-    public getCategoriasDropDown(){
+    public getCategoriasDropDown() {
         this.categoriaService.getCategoriasDropDown().subscribe(
             (data) => {
                 this.categorias = data;
@@ -110,14 +128,16 @@ export class CompetenciaFormComponent implements OnInit {
         return this.titleModal ? "Criar" : "Editar";
     }
 
-    verificaValidacao(campo){
-        return this.compForm.get(campo).valid && this.compForm.get(campo).touched;
+    verificaValidacao(campo) {
+        return (
+            this.compForm.get(campo).valid && this.compForm.get(campo).touched
+        );
     }
 
-    erroCss(campo){
-        return{
-            'has-error': this.verificaValidacao(campo),
-            'has-feedback': this.verificaValidacao(campo)
-        }
+    erroCss(campo) {
+        return {
+            "has-error": this.verificaValidacao(campo),
+            "has-feedback": this.verificaValidacao(campo),
+        };
     }
 }

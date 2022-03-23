@@ -29,6 +29,15 @@
                 class="text-danger"
                 >Deve possuir no mínimo 3 caracteres!</small
             >
+            <small
+                *ngIf="
+                    compForm.get('nome').errors &&
+                    compForm.get('nome').hasError('maxlength') &&
+                    compForm.get('nome').touched
+                "
+                class="text-danger"
+                >Deve possuir no máximo 255 caracteres!</small
+            >
         </div>
 
         <div class="field col-12 md:col-12">
@@ -42,11 +51,30 @@
             ></textarea>
             <small
                 *ngIf="
-                    compForm.get('descricao').invalid &&
+                    compForm.get('descricao').errors &&
+                    compForm.get('descricao').hasError('required') &&
                     compForm.get('descricao').touched
                 "
                 class="text-danger"
                 >A descrição é obrigatória!</small
+            >
+            <small
+                *ngIf="
+                    compForm.get('descricao').errors &&
+                    compForm.get('descricao').hasError('minlength') &&
+                    compForm.get('descricao').touched
+                "
+                class="text-danger"
+                >Deve possuir no mínimo 3 caracteres!</small
+            >
+            <small
+                *ngIf="
+                    compForm.get('descricao').errors &&
+                    compForm.get('descricao').hasError('maxlength') &&
+                    compForm.get('descricao').touched
+                "
+                class="text-danger"
+                >Deve possuir no máximo 255 caracteres!</small
             >
         </div>
 
@@ -63,14 +91,13 @@
             </p-dropdown>
             <small
                 *ngIf="
-                    compForm.get('idCategoria').invalid &&
+                    compForm.get('idCategoria').errors &&
+                    compForm.get('idCategoria').hasError('required') &&
                     compForm.get('idCategoria').touched
                 "
                 class="text-danger"
                 >A categoria é obrigatória!</small
             >
-
-            <!-- {{compForm.getRawValue() | json}} <br> -->
         </div>
     </div>
 
@@ -79,7 +106,7 @@
             icon="pi pi-check"
             label="{{ titleButton }}"
             styleClass="p-button-text"
-            (click)="verificaId()"
+            (click)="compForm.valid && verificaId()"
             [disabled]="!compForm.valid"
         ></p-button>
         <p-button

@@ -1,18 +1,24 @@
-import { Observable } from "rxjs";
-import { ColaboradorModel } from "./../../models/colaborador.model";
-import { SenioridadeModel } from "./../../models/senioridade.model";
-import { SenioridadeService } from "./../../services/senioridade.service";
-import { CompetenciaModel } from "./../../../competencia/models/competencia.model";
-import { CompetenciaNivel } from "./../../models/competencia-nivel.model";
+import { TurmaFormacaoService } from "./../../../turma-formacao/services/turma-formacao.service";
+import { CompetenciaColaboradorModel } from "./../../../turma-formacao/models/competencia-colaborador.model";
+import { Validacoes } from "./../../models/Validacoes.model";
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
-import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
+import {
+    AbstractControl,
+    FormBuilder,
+    FormGroup,
+    Validators,
+} from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
 import { MessageService, SelectItem } from "primeng/api";
+import { Observable } from "rxjs";
 import { CategoriaModel } from "src/app/modules/competencia/models/categoria.model";
-import { CategoriaService } from "src/app/modules/competencia/services/categoria.service";
 import { CompetenciaService } from "src/app/modules/competencia/services/competencia.service";
-import { Dropdown } from "primeng/dropdown";
+
 import { ColaboradorService } from "../../services/colaborador.service";
+import { CompetenciaModel } from "./../../../competencia/models/competencia.model";
+import { ColaboradorModel } from "./../../models/colaborador.model";
+import { CompetenciaNivel } from "./../../models/competencia-nivel.model";
+import { SenioridadeService } from "./../../services/senioridade.service";
 
 @Component({
     selector: "app-colaborador-form",
@@ -44,7 +50,8 @@ export class ColaboradorFormComponent implements OnInit {
         private restColab: ColaboradorService,
         private senioridadeService: SenioridadeService,
         public activatedRouter: ActivatedRoute,
-        private messageService: MessageService
+        private messageService: MessageService,
+        private turmaFormacaoService: TurmaFormacaoService
     ) {
         this.opcoesCompetencia = [];
     }
@@ -55,8 +62,22 @@ export class ColaboradorFormComponent implements OnInit {
 
         this.colabForm = this.fb.group({
             id: [null],
-            nome: ["", [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
-            sobrenome: ["", [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
+            nome: [
+                "",
+                [
+                    Validators.required,
+                    Validators.minLength(3),
+                    Validators.maxLength(255),
+                ],
+            ],
+            sobrenome: [
+                "",
+                [
+                    Validators.required,
+                    Validators.minLength(3),
+                    Validators.maxLength(255),
+                ],
+            ],
             cpf: ["", [Validators.required]],
             email: ["", [Validators.required, Validators.email]],
             dataNascimento: ["", [Validators.required]],
@@ -80,30 +101,46 @@ export class ColaboradorFormComponent implements OnInit {
 
     createColaborador() {
         this.finalizarRequisicao(
-            this.restColab.postColaborador(this.colabForm.getRawValue())
+            this.restColab.postColaborador(this.colabForm.getRawValue()),
+            this.showMessageCriar()
         );
-        this.showMessageCriar()
     }
 
     updateColaborador() {
         this.finalizarRequisicao(
-            this.restColab.putColaborador(this.colabForm.getRawValue())
+            this.restColab.putColaborador(this.colabForm.getRawValue()),
+            this.showMessageEditar()
         );
-        this.showMessageEditar()
     }
 
-    finalizarRequisicao(observable: Observable<ColaboradorModel>) {
-        observable.subscribe((result) => {
-            this.refreshColaboradores.emit();
-            this.fecharModal();
-        });
+    finalizarRequisicao(
+        observable: Observable<ColaboradorModel>,
+        mensagemSucesso
+    ) {
+        observable.subscribe(
+            (result) => {
+                this.refreshColaboradores.emit();
+                mensagemSucesso;
+                console.log("teste: ");
+                this.fecharModal();
+            },
+            (error) => console.log("testeErro: ", error)
+        );
     }
 
     showMessageEditar() {
-        this.messageService.add({severity:'success', summary: 'Colaborador editado com sucesso!', detail:''});
+        this.messageService.add({
+            severity: "success",
+            summary: "Colaborador editado com sucesso!",
+            detail: "",
+        });
     }
     showMessageCriar() {
-        this.messageService.add({severity:'success', summary: 'Coloborador criado com sucesso!', detail:''});
+        this.messageService.add({
+            severity: "success",
+            summary: "Coloborador criado com sucesso!",
+            detail: "",
+        });
     }
 
     public getCompetencia() {
@@ -153,7 +190,7 @@ export class ColaboradorFormComponent implements OnInit {
             return alert("Essa competência já foi adicionada");
         }
         campoCompetenciasList.push(compNivel);
-        console.log(campoCompetenciasList)
+        console.log(campoCompetenciasList);
     }
 
     removerCompetencia(idComp: number): void {
@@ -164,6 +201,13 @@ export class ColaboradorFormComponent implements OnInit {
             ({ idCompetencia }) => idCompetencia === idComp
         );
         campoCompetenciasList.splice(index, 1);
+    }
+
+    verificarPossibilidadeRemocaoCompetencia(
+        idColaborador: number,
+        idCompetencia: number
+    ) {
+        let competenciaColaborador: CompetenciaColaboradorModel[] = [];
     }
 
     competenciaIncluida(campoCompetenciasList, compNivel): boolean {
@@ -196,14 +240,16 @@ export class ColaboradorFormComponent implements OnInit {
         return this.titleModal ? "Criar" : "Editar";
     }
 
-    verificaValidacao(campo){
-        return this.colabForm.get(campo).valid && this.colabForm.get(campo).touched;
+    verificaValidacao(campo) {
+        return (
+            this.colabForm.get(campo).valid && this.colabForm.get(campo).touched
+        );
     }
 
-    erroCss(campo){
-        return{
-            'has-error': this.verificaValidacao(campo),
-            'has-feedback': this.verificaValidacao(campo)
-        }
+    erroCss(campo) {
+        return {
+            "has-error": this.verificaValidacao(campo),
+            "has-feedback": this.verificaValidacao(campo),
+        };
     }
 }
