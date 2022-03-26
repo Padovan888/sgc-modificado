@@ -1,3 +1,4 @@
+import { CompetenciaListaModel } from './../models/competencia-lista.model';
 import { CompetenciaFormComponent } from './../components/competencia-form/competencia-form.component';
 import { Observable } from 'rxjs';
 import { CompetenciaModel } from './../models/competencia.model';
@@ -16,22 +17,23 @@ export class CompetenciaService {
 
     protected UrlService: string = environment.apiUrl;
 
-    public getCompetencias(): Observable <CompetenciaModel[]> {
-        return this.http.get<CompetenciaModel[]>( this.UrlService + "/competencia" )
+    public getCompetencias(): Observable <CompetenciaListaModel[]> {
+        return this.http.get<CompetenciaListaModel[]>( this.UrlService + "/competencia" )
     }
 
     public postCompetencia(competencia: CompetenciaModel): Observable<CompetenciaModel>{
         return this.http.post<CompetenciaModel>(this.UrlService + "/competencia", competencia)
     }
 
-    public deleteCompetencia(id: number): Observable<CompetenciaModel>{
-        const url = `${this.UrlService}/competencia/${id}`  //estudar template string
-        return this.http.delete<CompetenciaModel>(url);
-    }
-
     public putCompetencia(competencia: CompetenciaModel): Observable<CompetenciaModel>{
         const url = `${this.UrlService}/competencia/${competencia.id}`
         return this.http.put<CompetenciaModel>(url, competencia)
     }
+
+    public deleteCompetencia(id: number): Observable<CompetenciaModel>{
+        const url = `${this.UrlService}/competencia/${id}`
+        return this.http.delete<CompetenciaModel>(url);
+    }
+
 }
 

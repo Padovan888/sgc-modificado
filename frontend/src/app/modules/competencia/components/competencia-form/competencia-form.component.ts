@@ -16,8 +16,7 @@ import { EventEmitter } from "@angular/core";
 })
 export class CompetenciaFormComponent implements OnInit {
     public compForm: FormGroup;
-    categorias: CategoriaModel[] = [];
-    categoriasTeste: SelectItem[] = [];
+    categorias: SelectItem[] = [];
     titleModal = true;
 
     @Input() display = false;
@@ -25,7 +24,6 @@ export class CompetenciaFormComponent implements OnInit {
 
     @Output() refreshCompetencias = new EventEmitter();
     @Output() aoFechar = new EventEmitter();
-
 
     constructor(
         private fb: FormBuilder,
@@ -36,11 +34,25 @@ export class CompetenciaFormComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
-        this.getCategorias();
+        this.getCategoriasDropDown();
         this.compForm = this.fb.group({
             id: [null],
-            nome: ["", [Validators.required, Validators.minLength(3), Validators.maxLength(55)]],
-            descricao: ["", [Validators.required, Validators.minLength(3), Validators.maxLength(255)]],
+            nome: [
+                "",
+                [
+                    Validators.required,
+                    Validators.minLength(3),
+                    Validators.maxLength(55),
+                ],
+            ],
+            descricao: [
+                "",
+                [
+                    Validators.required,
+                    Validators.minLength(3),
+                    Validators.maxLength(255),
+                ],
+            ],
             idCategoria: ["", [Validators.required]],
         });
         if (!!this.competenciaEditada) {
@@ -62,47 +74,45 @@ export class CompetenciaFormComponent implements OnInit {
         this.finalizarRequisicao(
             this.rest.postCompetencia(this.compForm.getRawValue())
         );
-        this.showMessageCriar()
-
+        // this.messageService.add({
+        //     severity:"success",
+        //     summary:"Confirmação",
+        //     detail:"Competência criada com sucesso!"
+        // })
     }
 
     updateCompetencia() {
         this.finalizarRequisicao(
             this.rest.putCompetencia(this.compForm.getRawValue())
         );
-        this.showMessageEditar()
+        // this.messageService.add({
+        //     severity:"success",
+        //     summary:"Confirmação",
+        //     detail:"Competência atualizada com sucesso!"
+        // })
     }
 
     finalizarRequisicao(observable: Observable<CompetenciaModel>) {
-        observable.subscribe((result) => {
-            this.refreshCompetencias.emit();
-            this.fecharModal();
-        });
+        observable.subscribe(
+            (result) => {
+                this.refreshCompetencias.emit();
+                this.fecharModal();
+            },
+            (error) => {
+                console.log("Erro: ", error.error);
+            }
+        );
     }
 
-    public getCategorias() {
-        this.categoriaService.getCategorias().subscribe(
+    public getCategoriasDropDown() {
+        this.categoriaService.getCategoriasDropDown().subscribe(
             (data) => {
-                this.categoriasTeste = this.converterParaDropDown(data, 'id', 'descricao');
+                this.categorias = data;
             },
             (error) => {
                 console.log("Erro", error);
             }
         );
-    }
-
-    showMessageEditar() {
-        this.messageService.add({severity:'success', summary: 'Competência editada com sucesso!', detail:''});
-    }
-    showMessageCriar() {
-        this.messageService.add({severity:'success', summary: 'Competência criada com sucesso!', detail:''});
-    }
-
-    converterParaDropDown(n: any[], valor: string, nome: string): SelectItem[] {
-        return n.map((item: any) => ({
-            value: item[valor],
-            label: item[nome],
-        }));
     }
 
     fecharModal() {
@@ -118,14 +128,16 @@ export class CompetenciaFormComponent implements OnInit {
         return this.titleModal ? "Criar" : "Editar";
     }
 
-    verificaValidacao(campo){
-        return this.compForm.get(campo).valid && this.compForm.get(campo).touched;
+    verificaValidacao(campo) {
+        return (
+            this.compForm.get(campo).valid && this.compForm.get(campo).touched
+        );
     }
 
-    erroCss(campo){
-        return{
-            'has-error': this.verificaValidacao(campo),
-            'has-feedback': this.verificaValidacao(campo)
-        }
+    erroCss(campo) {
+        return {
+            "has-error": this.verificaValidacao(campo),
+            "has-feedback": this.verificaValidacao(campo),
+        };
     }
 }

@@ -18,9 +18,7 @@ export class ColaboradorService {
         );
     }
 
-    public postColaborador(
-        colaborador: ColaboradorModel
-    ): Observable<ColaboradorModel> {
+    public postColaborador(colaborador: ColaboradorModel): Observable<ColaboradorModel> {
         return this.http.post<ColaboradorModel>(
             this.UrlService + "/colaborador",
             colaborador

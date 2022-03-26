@@ -2,6 +2,7 @@ package com.basis.turma.sgc.service;
 
 import com.basis.turma.sgc.repository.CategoriaRepository;
 import com.basis.turma.sgc.service.dto.CategoriaDTO;
+import com.basis.turma.sgc.service.dto.DropDownDTO;
 import com.basis.turma.sgc.service.mapper.CategoriaMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,10 @@ public class CategoriaService {
 
     public List<CategoriaDTO> listar(){
         return mapper.toDTO(repository.findAll());
+    }
+
+    public List<DropDownDTO> listarCategoriaComoDropDown(){
+        return repository.findAllByDropDown();
     }
 
 }

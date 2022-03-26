@@ -1,3 +1,4 @@
+import { CompetenciaColaboradorModel } from "./../models/competencia-colaborador.model";
 import { TurmaFormacaoListaModel } from "./../models/turma-formacao-lista.model";
 import { TurmaFormacaoModel } from "./../models/turma-formacao.model";
 import { Observable } from "rxjs";
@@ -38,5 +39,13 @@ export class TurmaFormacaoService {
     ): Observable<TurmaFormacaoModel> {
         const url = `${this.UrlService}/turmaformacao/${turmaFormacao.id}`;
         return this.http.put<TurmaFormacaoModel>(url, turmaFormacao);
+    }
+
+    verificaVinculoColaboradorCompetenciaTurma(
+        idColaborador: number,
+        idCompetencia: number
+    ): Observable<Boolean> {
+        const url = `${this.UrlService}/turmaformacao/associado/${idColaborador}/${idCompetencia}`;
+        return this.http.get<Boolean>(url);
     }
 }

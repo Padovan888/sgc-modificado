@@ -9,7 +9,9 @@ import com.basis.turma.sgc.resources.exception.RegraNegocioException;
 import com.basis.turma.sgc.service.dto.CompetenciaDTO;
 
 import com.basis.turma.sgc.repository.CompetenciaRepository;
+import com.basis.turma.sgc.service.dto.CompetenciaListaDTO;
 import com.basis.turma.sgc.service.dto.TurmaFormacaoDTO;
+import com.basis.turma.sgc.service.mapper.CompetenciaListaMapper;
 import com.basis.turma.sgc.service.mapper.CompetenciaMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +27,15 @@ public class CompetenciaService {
     private final CompetenciaRepository competenciaRepository;
     private final ColaboradorCompetenciaRepository colaboradorCompetenciaRepository;
     private final CompetenciaMapper competenciaMapper;
+    private final CompetenciaListaMapper competenciaListaMapper;
 
-    public List<CompetenciaDTO> listar(){
-        return competenciaMapper.toDTO(competenciaRepository.findAll());
+    public List<CompetenciaListaDTO> listar(){
+        return competenciaListaMapper.toDTO(competenciaRepository.findAll());
+    }
+
+    public CompetenciaListaDTO buscarPorId(Long id){
+        return competenciaListaMapper.toDTO(competenciaRepository.findById(id).orElseThrow(()->
+                new RegraNegocioException("Competência não encontrada!")));
     }
 
     public CompetenciaDTO criar(CompetenciaDTO competenciaDTO){
@@ -35,12 +43,10 @@ public class CompetenciaService {
         return competenciaMapper.toDTO(competenciaRepository.save(competencia));
     }
 
-    public CompetenciaDTO buscarPorId(Long id){
-        return competenciaMapper.toDTO(competenciaRepository.findById(id).orElseThrow(()->
-                new RegraNegocioException("Competencia não encontrada !")));
-    }
-
     public CompetenciaDTO atualizar(Long id, CompetenciaDTO competenciaDTO){
+        if(!competenciaRepository.existsById(id)){
+            throw new RegraNegocioException("A competência de id " + id.toString() + " não existe!");
+        }
         Competencia competencia = competenciaMapper.toEntity(competenciaDTO);
         competencia.setId(id);
         return competenciaMapper.toDTO(competenciaRepository.save(competencia));
