@@ -1,7 +1,6 @@
 package com.basis.turma.sgc.service;
 
 import com.basis.turma.sgc.domain.*;
-import com.basis.turma.sgc.repository.ColaboradorCompetenciaRepository;
 import com.basis.turma.sgc.repository.StatusRepository;
 import com.basis.turma.sgc.repository.TurmaFormacaoCompetenciaColaboradorRepository;
 import com.basis.turma.sgc.repository.TurmaFormacaoRepository;
@@ -136,12 +135,8 @@ public class TurmaFormacaoService {
         return statusRepository.findAllByDropDown();
     }
 
-    public List<CompetenciaColaboradorDTO> listarCompetenciaColaborador(Long idColaborador, Long idCompetencia) {
-        List<CompetenciaColaboradorDTO> competenciaColaboradorDTO =
-                competenciaColaboradorMapper.toDTO(turmaFormacaoCompetenciaColaboradorRepository.findAllByColaboradorIdAndCompetenciaId(
-                        idColaborador, idCompetencia
-                ));
-        return competenciaColaboradorDTO;
+    public Boolean verificaVinculoColaboradorCompetenciaTurma(Long idColaborador, Long idCompetencia) {
+        return turmaFormacaoCompetenciaColaboradorRepository.findByColaboradorIdAndCompetenciaId(idColaborador, idCompetencia);
     }
 
 }

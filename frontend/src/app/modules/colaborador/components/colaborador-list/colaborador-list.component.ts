@@ -1,8 +1,7 @@
-import { ColaboradorFormComponent } from './../colaborador-form/colaborador-form.component';
 import { ColaboradorModel } from "./../../models/colaborador.model";
 import { ColaboradorService } from "./../../services/colaborador.service";
-import { Component, Input, OnInit, ViewChild } from "@angular/core";
-import { MessageService } from 'primeng';
+import { Component, OnInit } from "@angular/core";
+import { ConfirmationService, MessageService } from "primeng";
 
 @Component({
     selector: "app-colaborador-list",
@@ -10,29 +9,30 @@ import { MessageService } from 'primeng';
     styleUrls: ["./colaborador-list.component.css"],
 })
 export class ColaboradorListComponent implements OnInit {
-
     cols: any[];
     colaboradores: ColaboradorModel[];
     display: boolean = false;
     colaboradorEditado: ColaboradorModel;
     isVisualizar: boolean = false;
 
-
-    constructor(private colaboradorService: ColaboradorService,
-        private messageService: MessageService) {}
+    constructor(
+        private colaboradorService: ColaboradorService,
+        private messageService: MessageService,
+        private confirmationService: ConfirmationService
+    ) {}
 
     ngOnInit(): void {
         this.getColaborador();
         this.columns();
     }
 
-    public columns(){
+    public columns() {
         this.cols = [
             { field: "nome", header: "Nome" },
-            { field: "email", header: "Email"},
-            { field: "descricaoSenioridade", header: "Senioridade"},
+            { field: "email", header: "Email" },
+            { field: "descricaoSenioridade", header: "Senioridade" },
             { field: "acoes", header: "Ações" },
-        ]
+        ];
     }
 
     public getColaborador() {
@@ -46,27 +46,39 @@ export class ColaboradorListComponent implements OnInit {
         );
     }
 
-    public editarColaborador(colaborador: ColaboradorModel){
-        colaborador.dataNascimento = new Date (colaborador.dataNascimento);
-        colaborador.dataAdmissao = new Date (colaborador.dataAdmissao);
+    public editarColaborador(colaborador: ColaboradorModel) {
+        colaborador.dataNascimento = new Date(colaborador.dataNascimento);
+        colaborador.dataAdmissao = new Date(colaborador.dataAdmissao);
 
         this.colaboradorEditado = colaborador;
         this.showDialog(true);
     }
 
-    public excluirColaborador(id: number){
-        this.colaboradorService.deleteColaborador(id).subscribe(() =>
-        { this.showMessageSuccess, this.getColaborador(); },
-        () => {this.showMessageError() })
+    public excluirColaborador(id: number) {
+        this.colaboradorService.deleteColaborador(id).subscribe(
+            () => {
+                this.showMessageSuccess, this.getColaborador();
+            },
+            () => {
+                this.showMessageError();
+            }
+        );
     }
 
     showMessageSuccess() {
-        this.messageService.add({severity:'success', summary: 'Colaborador excluído com sucesso!', detail:''});
+        this.messageService.add({
+            severity: "success",
+            summary: "Colaborador excluído com sucesso!",
+            detail: "",
+        });
     }
     showMessageError() {
-        this.messageService.add({severity:'error', summary: 'Falha ao excluir colaborador', detail:'Verifique se o colaborador possui alguma competência vinculada'});
+        this.messageService.add({
+            severity: "error",
+            summary: "Falha ao excluir colaborador",
+            detail: "Verifique se o colaborador possui alguma competência vinculada",
+        });
     }
-
 
     showDialog(edit: boolean) {
         this.display = true;
@@ -77,5 +89,16 @@ export class ColaboradorListComponent implements OnInit {
         this.getColaborador();
     }
 
-
+    confirmarExclusaoColaborador(id: number) {
+        console.log("Bateu aqui 1");
+        this.confirmationService.confirm({
+            message: "Você deseja continuar com o processo?",
+            header: "Confirmação",
+            icon: "pi pi-exclamation-triangle",
+            accept: () => {
+                console.log("Bateu aqui");
+                this.excluirColaborador(id);
+            },
+        });
+    }
 }

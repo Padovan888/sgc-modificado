@@ -36,6 +36,8 @@ export class ColaboradorFormComponent implements OnInit {
     nivelSelecionado: CategoriaModel;
     senioridadeSelecionada: CategoriaModel;
     titleModal = true;
+    competenciaColaborador: CompetenciaColaboradorModel[] = [];
+    competenciaColaboradorBoolean: Boolean;
 
     public isVisualizar: boolean = true;
 
@@ -251,5 +253,35 @@ export class ColaboradorFormComponent implements OnInit {
             "has-error": this.verificaValidacao(campo),
             "has-feedback": this.verificaValidacao(campo),
         };
+    }
+
+    verificarVinculoColaboradorCompetenciaTurma(
+        idColaborador: number,
+        idCompetencia: number
+    ) {
+        this.turmaFormacaoService
+            .verificaVinculoColaboradorCompetenciaTurma(
+                idColaborador,
+                idCompetencia
+            )
+            .subscribe(
+                (data) => {
+                    this.competenciaColaboradorBoolean = data;
+                    console.log("Boolean: ", data);
+                    if (this.competenciaColaboradorBoolean) {
+                        this.messageService.add({
+                            severity: "error",
+                            summary:
+                                "Não foi possível remover essa competência",
+                            detail: "O colaborador está lecionando essa competência em uma Turma de Formação",
+                        });
+                        return;
+                    }
+                    this.removerCompetencia(idCompetencia);
+                },
+                (error) => {
+                    console.error("Erro: ", error);
+                }
+            );
     }
 }

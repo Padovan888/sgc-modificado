@@ -1,5 +1,6 @@
+import { ConfirmDialogModule, ConfirmationService } from 'primeng';
 import { SharedModule } from './../../shared/shared.module';
-import { AbstractControl, AbstractControlDirective, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -14,7 +15,9 @@ import { ColaboradorFormComponent } from './components/colaborador-form/colabora
     ColaboradorRoutingModule,
     FormsModule,
     SharedModule,
-    ReactiveFormsModule
-  ]
+    ReactiveFormsModule,
+    ConfirmDialogModule
+  ],
+  providers: [ConfirmationService]
 })
 export class ColaboradorModule { }

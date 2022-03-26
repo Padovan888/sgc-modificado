@@ -15,7 +15,6 @@ export class TurmaFormacaoListComponent implements OnInit {
     display: boolean = false;
     turmaFormacaoEditada: TurmaFormacaoModel;
     isVisualizar: boolean = false;
-    competenciaColaborador: CompetenciaColaboradorModel[] = [];
 
     constructor(
         private turmaFormacaoService: TurmaFormacaoService,
@@ -46,22 +45,6 @@ export class TurmaFormacaoListComponent implements OnInit {
                 console.log("Erro", error);
             }
         );
-    }
-
-    public listarCompetenciaColaborador(
-        idColaborador: number,
-        idCompetencia: number
-    ) {
-        this.turmaFormacaoService
-            .listarCompetenciaColaborador(idColaborador, idCompetencia)
-            .subscribe(
-                (data) => {
-                    this.competenciaColaborador = data;
-                },
-                (error) => {
-                    console.log("Erro", error);
-                }
-            );
     }
 
     public editarTurmaFormacao(turmaFormacao: TurmaFormacaoModel) {

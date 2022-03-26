@@ -7,7 +7,7 @@ import { CompetenciaRoutingModule } from './competencia-routing.module';
 import { CompetenciaListComponent } from './components/competencia-list/competencia-list.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CompetenciaFormComponent } from './components/competencia-form/competencia-form.component';
-import { ConfirmationService, ConfirmDialog, ConfirmDialogModule } from 'primeng';
+import { ConfirmationService, ConfirmDialogModule } from 'primeng';
 
 
 @NgModule({

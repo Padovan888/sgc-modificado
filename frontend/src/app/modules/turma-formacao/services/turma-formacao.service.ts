@@ -41,17 +41,11 @@ export class TurmaFormacaoService {
         return this.http.put<TurmaFormacaoModel>(url, turmaFormacao);
     }
 
-    public listarCompetenciaColaborador(
+    verificaVinculoColaboradorCompetenciaTurma(
         idColaborador: number,
         idCompetencia: number
-    ): Observable<CompetenciaColaboradorModel[]> {
-        const url = `${this.UrlService}/turmaformacao/lista/${idColaborador}/${idCompetencia}`;
-        return this.http.get<CompetenciaColaboradorModel[]>(
-            this.UrlService +
-                "/turmaformacao/lista/" +
-                idColaborador +
-                "/" +
-                idCompetencia
-        );
+    ): Observable<Boolean> {
+        const url = `${this.UrlService}/turmaformacao/associado/${idColaborador}/${idCompetencia}`;
+        return this.http.get<Boolean>(url);
     }
 }
