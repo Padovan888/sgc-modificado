@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -19,24 +20,32 @@ import java.util.List;
 @NoArgsConstructor
 public class Colaborador implements Serializable {
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequencia_colaborador")
     @SequenceGenerator(name = "sequencia_colaborador", sequenceName = "sequencia_colaborador", allocationSize = 1)
     @Column(name = "id", nullable = false)
     private Long id;
+
     @Column(name = "nome", nullable = false)
     private String nome;
+
     @Column(name = "sobrenome", nullable = false)
     private String sobrenome;
+
     @Column(name = "cpf", nullable = false, unique = true)
     private String cpf;
+
     @Column(name = "email", nullable = false, unique = true)
     private String email;
+
     @Column(name = "foto")
-    private String foto;
+    @Lob
+    @Type(type = "org.hibernate.type.BinaryType")
+    private byte[] foto;
+
     @Column(name = "data_nascimento", nullable = false)
     private LocalDate dataNascimento;
+
     @Column(name = "data_admissao", nullable = false)
     private LocalDate dataAdmissao;
 
@@ -46,6 +55,5 @@ public class Colaborador implements Serializable {
 
     @OneToMany(mappedBy = "colaborador", fetch = FetchType.EAGER)
     private List<ColaboradorCompetencia> competenciasList;
-
 
 }

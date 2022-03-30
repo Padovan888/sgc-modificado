@@ -2,6 +2,8 @@ package com.basis.turma.sgc.service.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotEmpty;
@@ -12,7 +14,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 public class TurmaFormacaoDTO implements Serializable {
 
     private Long id;
@@ -29,7 +32,6 @@ public class TurmaFormacaoDTO implements Serializable {
     @NotNull(message = "O campo status não pode ser nulo!")
     private Long idStatus;
     private String descricaoStatus;
-//    @Size(min = 1, message = "Uma turma de formação deve possuir no mínimo uma competência!")
     private List<CompetenciaColaboradorDTO> competenciasColaboradores = new ArrayList<>();
 
 }

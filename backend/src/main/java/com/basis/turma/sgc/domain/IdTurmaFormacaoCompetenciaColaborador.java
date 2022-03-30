@@ -16,8 +16,10 @@ public class IdTurmaFormacaoCompetenciaColaborador implements Serializable{
 
     @Column(name = "id_turma_formacao")
     private Long id_turma_formacao;
+
     @Column(name = "id_competencia")
     private Long id_competencia;
+
     @Column(name = "id_colaborador")
     private Long id_colaborador;
 

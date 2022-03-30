@@ -49,7 +49,6 @@ export class ColaboradorListComponent implements OnInit {
     public editarColaborador(colaborador: ColaboradorModel) {
         colaborador.dataNascimento = new Date(colaborador.dataNascimento);
         colaborador.dataAdmissao = new Date(colaborador.dataAdmissao);
-
         this.colaboradorEditado = colaborador;
         this.showDialog(true);
     }
@@ -90,13 +89,11 @@ export class ColaboradorListComponent implements OnInit {
     }
 
     confirmarExclusaoColaborador(id: number) {
-        console.log("Bateu aqui 1");
         this.confirmationService.confirm({
             message: "Você deseja continuar com o processo?",
             header: "Confirmação",
             icon: "pi pi-exclamation-triangle",
             accept: () => {
-                console.log("Bateu aqui");
                 this.excluirColaborador(id);
             },
         });

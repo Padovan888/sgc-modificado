@@ -10,6 +10,7 @@ import com.basis.turma.sgc.service.dto.CompetenciaDTO;
 
 import com.basis.turma.sgc.repository.CompetenciaRepository;
 import com.basis.turma.sgc.service.dto.CompetenciaListaDTO;
+import com.basis.turma.sgc.service.dto.DropDownDTO;
 import com.basis.turma.sgc.service.dto.TurmaFormacaoDTO;
 import com.basis.turma.sgc.service.mapper.CompetenciaListaMapper;
 import com.basis.turma.sgc.service.mapper.CompetenciaMapper;
@@ -61,6 +62,10 @@ public class CompetenciaService {
             throw new RegraNegocioException("Um colaborador possui essa competência cadastrada!");
         }
         competenciaRepository.deleteById(id);
+    }
+
+    public List<DropDownDTO> listarCompetenciaComoDropDown(){
+        return competenciaRepository.findAllByDropDown();
     }
 
 }

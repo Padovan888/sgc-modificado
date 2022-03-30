@@ -2,7 +2,7 @@ import { CompetenciaColaboradorModel } from "./../../models/competencia-colabora
 import { TurmaFormacaoService } from "./../../services/turma-formacao.service";
 import { TurmaFormacaoModel } from "./../../models/turma-formacao.model";
 import { Component, OnInit } from "@angular/core";
-import { MessageService } from "primeng";
+import { ConfirmationService, MessageService } from "primeng";
 
 @Component({
     selector: "app-turma-formacao-list",
@@ -18,8 +18,9 @@ export class TurmaFormacaoListComponent implements OnInit {
 
     constructor(
         private turmaFormacaoService: TurmaFormacaoService,
-        private messageService: MessageService
-    ) {}
+        private messageService: MessageService,
+        private confirmationService: ConfirmationService
+    ) { }
 
     ngOnInit(): void {
         this.getTurmaFormacao();
@@ -89,5 +90,16 @@ export class TurmaFormacaoListComponent implements OnInit {
         this.turmaFormacaoEditada = edit
             ? this.turmaFormacaoEditada
             : undefined;
+    }
+
+    confirmarExclusaoTurmaFormacao(id: number) {
+        this.confirmationService.confirm({
+            message: "Você deseja continuar com o processo?",
+            header: "Confirmação",
+            icon: "pi pi-exclamation-triangle",
+            accept: () => {
+                this.excluirTurmaFormacao(id);
+            },
+        });
     }
 }

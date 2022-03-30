@@ -1,23 +1,26 @@
 package com.basis.turma.sgc.domain;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import java.io.Serializable;
 
-@Entity (name = "senioridade")
+@Entity
+@Table(name = "senioridade")
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
 public class Senioridade implements Serializable {
+
     @Id
     @Column(name="id")
     private Long id;
+
     @Column(name="descricao")
     private String descricao;
 

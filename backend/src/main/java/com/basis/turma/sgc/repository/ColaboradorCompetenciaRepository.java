@@ -9,10 +9,12 @@ import java.util.List;
 
 @Repository
 public interface ColaboradorCompetenciaRepository extends JpaRepository<ColaboradorCompetencia, IdColaboradorCompetencia> {
+
     void deleteAllByColaboradorId(Long id);
 
     List<ColaboradorCompetencia> findAllByCompetenciaId(Long id);
 
     List<ColaboradorCompetencia> findAllByColaboradorIdAndCompetenciaId(Long colaboradorId, Long competenciaId);
+
 }
 

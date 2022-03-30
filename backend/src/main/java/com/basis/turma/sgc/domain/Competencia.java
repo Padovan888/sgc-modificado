@@ -19,7 +19,6 @@ public class Competencia implements Serializable {
     @SequenceGenerator(name = "sequencia_competencia",
             sequenceName = "sequencia_competencia",
             allocationSize = 1)
-
     private Long id;
 
     @Column(name = "nome", nullable = false)
@@ -31,6 +30,5 @@ public class Competencia implements Serializable {
     @ManyToOne
     @JoinColumn(name = "id_categoria", referencedColumnName = "id")
     private Categoria categoria;
-
 
 }

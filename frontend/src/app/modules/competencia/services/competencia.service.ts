@@ -1,3 +1,4 @@
+import { SelectItem } from 'primeng/api';
 import { CompetenciaListaModel } from './../models/competencia-lista.model';
 import { CompetenciaFormComponent } from './../components/competencia-form/competencia-form.component';
 import { Observable } from 'rxjs';
@@ -13,26 +14,30 @@ import { environment } from 'src/environments/environment';
 })
 export class CompetenciaService {
 
-    constructor( private http: HttpClient ){ }
+    constructor(private http: HttpClient) { }
 
     protected UrlService: string = environment.apiUrl;
 
-    public getCompetencias(): Observable <CompetenciaListaModel[]> {
-        return this.http.get<CompetenciaListaModel[]>( this.UrlService + "/competencia" )
+    getCompetencias(): Observable<CompetenciaListaModel[]> {
+        return this.http.get<CompetenciaListaModel[]>(this.UrlService + "/competencia")
     }
 
-    public postCompetencia(competencia: CompetenciaModel): Observable<CompetenciaModel>{
+    postCompetencia(competencia: CompetenciaModel): Observable<CompetenciaModel> {
         return this.http.post<CompetenciaModel>(this.UrlService + "/competencia", competencia)
     }
 
-    public putCompetencia(competencia: CompetenciaModel): Observable<CompetenciaModel>{
+    putCompetencia(competencia: CompetenciaModel): Observable<CompetenciaModel> {
         const url = `${this.UrlService}/competencia/${competencia.id}`
         return this.http.put<CompetenciaModel>(url, competencia)
     }
 
-    public deleteCompetencia(id: number): Observable<CompetenciaModel>{
+    deleteCompetencia(id: number): Observable<CompetenciaModel> {
         const url = `${this.UrlService}/competencia/${id}`
         return this.http.delete<CompetenciaModel>(url);
+    }
+
+    listarCompetenciaComoDropDown(): Observable<SelectItem[]> {
+        return this.http.get<SelectItem[]>(this.UrlService + "/competencia/dropdown");
     }
 
 }

@@ -8,7 +8,15 @@
                 class="inputfield w-full col-6"
                 formControlName="nome"
             />
-            <small *ngIf="turmaFormacaoForm.get('nome').invalid && turmaFormacaoForm.get('nome').touched" class="text-danger">Nome é obrigatório!</small>
+            <small
+                *ngIf="
+                    turmaFormacaoForm.get('nome').errors &&
+                    turmaFormacaoForm.get('nome').hasError('required') &&
+                    turmaFormacaoForm.get('nome').touched
+                "
+                class="text-danger"
+                >Nome é obrigatório!</small
+            >
         </div>
         <div class="field col-12 md:col-12">
             <label for="descricao">Descrição</label>
@@ -19,8 +27,14 @@
                 pInputTextarea
                 formControlName="descricao"
             ></textarea>
-            <small *ngIf="turmaFormacaoForm.get('descricao').invalid && turmaFormacaoForm.get('descricao').touched" class="text-danger">Descrição é obrigatória!</small>
-
+            <small
+                *ngIf="
+                    turmaFormacaoForm.get('descricao').invalid &&
+                    turmaFormacaoForm.get('descricao').touched
+                "
+                class="text-danger"
+                >Descrição é obrigatória!</small
+            >
         </div>
         <div class="col-12 md:col-6 lg:col-3" style="width: 80%">
             <label for="dataInicio">Data de Início</label>
@@ -32,8 +46,14 @@
                 [yearNavigator]="true"
                 yearRange="1980:2030"
             ></p-calendar>
-            <small *ngIf="turmaFormacaoForm.get('dataInicio').invalid && turmaFormacaoForm.get('dataInicio').touched" class="text-danger">Data de início é obrigatória!</small>
-
+            <small
+                *ngIf="
+                    turmaFormacaoForm.get('dataInicio').invalid &&
+                    turmaFormacaoForm.get('dataInicio').touched
+                "
+                class="text-danger"
+                >Data de início é obrigatória!</small
+            >
         </div>
         <div class="col-12 md:col-6 lg:col-3" style="width: 80%">
             <label for="dataTermino">Data de Término</label>
@@ -45,26 +65,38 @@
                 [yearNavigator]="true"
                 yearRange="1980:2030"
             ></p-calendar>
-            <small *ngIf="turmaFormacaoForm.get('dataTermino').invalid && turmaFormacaoForm.get('dataTermino').touched" class="text-danger">Data de término é obrigatória!</small>
-
+            <small
+                *ngIf="
+                    turmaFormacaoForm.get('dataTermino').invalid &&
+                    turmaFormacaoForm.get('dataTermino').touched
+                "
+                class="text-danger"
+                >Data de término é obrigatória!</small
+            >
         </div>
-        <div class="col-12 md:col-6 lg:col-3" style="width: 80%">
+        <div class="ui-g-12">
             <label>Status</label>
             <p-dropdown
                 placeholder="Selecione o status"
                 styleClass="w-full dropborda col-12 md:col-6"
-                [options]="converterParaDropDown(status, 'id', 'descricao')"
+                [options]="statusDropDown"
                 appendTo="body"
                 formControlName="idStatus"
             >
             </p-dropdown>
-            <small *ngIf="turmaFormacaoForm.get('idStatus').invalid && turmaFormacaoForm.get('idStatus').touched" class="text-danger">Status é obrigatório!</small>
-
+            <small
+                *ngIf="
+                    turmaFormacaoForm.get('idStatus').invalid &&
+                    turmaFormacaoForm.get('idStatus').touched
+                "
+                class="text-danger"
+                >Status é obrigatório!</small
+            >
         </div>
     </div>
-    <hr width = 100%>
+    <hr width="100%" />
     <h3 class="text-center">Selecione os colaboradores e competências</h3>
-    <div class="col-12 md:col-6 lg:col-3" style="width: 80%">
+    <div class="ui-g-12">
         <label>Colaborador</label>
         <p-dropdown
             #dd
@@ -76,12 +108,14 @@
         >
         </p-dropdown>
     </div>
-    <div class="col-12 md:col-6 lg:col-3" style="width: 80%">
+    <div class="ui-g-12">
         <label>Competência</label>
         <p-dropdown
             placeholder="Selecione a competência"
             styleClass="w-full dropborda col-12 md:col-6"
-            [options]="converterParaDropDown(competenciasFiltradas, null, 'nome')"
+            [options]="
+                converterParaDropDown(competenciasFiltradas, null, 'nome')
+            "
             appendTo="body"
             [(ngModel)]="competenciaSelecionada"
         >
@@ -99,7 +133,11 @@
     <div class="col-12 md:col-6 lg:col-3" style="width: 80%">
         <h4>Colaboradores/Competências:</h4>
         <div
-            *ngFor="let colaboradorCompetencia of turmaFormacaoForm.get('competenciasColaboradores').value"
+            *ngFor="
+                let colaboradorCompetencia of turmaFormacaoForm.get(
+                    'competenciasColaboradores'
+                ).value
+            "
         >
             {{ gerarNomeCompetenciaColaborador(colaboradorCompetencia) }}
             <button
@@ -107,9 +145,13 @@
                 label="Excluir"
                 class="p-button-raised ui-button-danger personButton w-3 h-1rm"
                 (click)="
-                    removerCompetenciaColaborador(colaboradorCompetencia.idColaborador,colaboradorCompetencia.idCompetencia)"
+                    removerCompetenciaColaborador(
+                        colaboradorCompetencia.idColaborador,
+                        colaboradorCompetencia.idCompetencia
+                    )
+                "
             ></button>
-            <hr width = 100% >
+            <hr width="100%" />
         </div>
     </div>
     <p-footer>
@@ -117,7 +159,7 @@
             icon="pi pi-check"
             label="{{ titleButton }}"
             styleClass="p-button-text"
-            (click)="verificaId()"
+            (click)="turmaFormacaoForm.valid && verificaId()"
             [disabled]="!turmaFormacaoForm.valid"
         ></p-button>
         <p-button

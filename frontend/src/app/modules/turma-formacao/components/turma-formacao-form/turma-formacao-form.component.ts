@@ -27,6 +27,7 @@ export class TurmaFormacaoFormComponent implements OnInit {
     opcoesCompetencia: SelectItem[];
     competenciaSelecionada: CompetenciaModel;
     status: StatusModel[] = [];
+    statusDropDown: SelectItem[] = [];
     statusSelecionado: StatusModel;
     competenciasFiltradas: CompetenciaModel[] = [];
     titleModal = true;
@@ -45,19 +46,34 @@ export class TurmaFormacaoFormComponent implements OnInit {
         private colaboradorService: ColaboradorService,
         private competenciaService: CompetenciaService,
         private messageService: MessageService
-        ) {
-            this.opcoesColaborador = [];
-            this.opcoesCompetencia = [];
-        }
+    ) {
+        this.opcoesColaborador = [];
+        this.opcoesCompetencia = [];
+    }
 
     ngOnInit(): void {
         this.getColaborador();
         this.getCompetencia();
         this.getStatus();
+        this.getStatusComoDropDown();
         this.turmaFormacaoForm = this.formBuilder.group({
             id: [null],
-            nome: ["", [Validators.required]],
-            descricao: ["", [Validators.required]],
+            nome: [
+                "",
+                [
+                    Validators.required,
+                    Validators.minLength(3),
+                    Validators.maxLength(255),
+                ],
+            ],
+            descricao: [
+                "",
+                [
+                    Validators.required,
+                    Validators.minLength(3),
+                    Validators.maxLength(255),
+                ],
+            ],
             dataInicio: ["", [Validators.required]],
             dataTermino: ["", [Validators.required]],
             idStatus: ["", [Validators.required]],
@@ -69,13 +85,15 @@ export class TurmaFormacaoFormComponent implements OnInit {
         }
     }
 
-    public filtrarCompetencias(idColab: number){
-        const findColab = this.colaborador.find((it)=>it.id === idColab) //identificando colab passado
-        if (findColab){
-            const competencias = findColab.competenciasList
-            this.competenciasFiltradas = this.competencia.filter((it)=>{
-                return competencias.some((it2)=> it2.nivel === 4 && it2.idCompetencia === it.id)
-            })
+    public filtrarCompetencias(idColab: number) {
+        const findColab = this.colaborador.find((it) => it.id === idColab); //identificando colab passado
+        if (findColab) {
+            const competencias = findColab.competenciasList;
+            this.competenciasFiltradas = this.competencia.filter((it) => {
+                return competencias.some(
+                    (it2) => it2.nivel === 4 && it2.idCompetencia === it.id
+                );
+            });
         }
     }
 
@@ -109,14 +127,24 @@ export class TurmaFormacaoFormComponent implements OnInit {
             (error) => {
                 console.log("Erro", error);
             }
-            );
-        }
+        );
+    }
 
-        public fecharModal() {
-            this.display = false;
-            this.aoFechar.emit();
-        }
+    getStatusComoDropDown() {
+        this.statusService.getStatusComoDropDown().subscribe(
+            (data) => {
+                this.statusDropDown = data;
+            },
+            (error) => {
+                console.log("Erro: ", error);
+            }
+        )
+    }
 
+    public fecharModal() {
+        this.display = false;
+        this.aoFechar.emit();
+    }
 
     public finalizarRequisicao(observable: Observable<TurmaFormacaoModel>) {
         observable.subscribe((result) => {
@@ -144,10 +172,18 @@ export class TurmaFormacaoFormComponent implements OnInit {
     }
 
     showMessageEditar() {
-        this.messageService.add({severity:'success', summary: 'Turma de formação editada com sucesso!', detail:''});
+        this.messageService.add({
+            severity: "success",
+            summary: "Turma de formação editada com sucesso!",
+            detail: "",
+        });
     }
     showMessageCriar() {
-        this.messageService.add({severity:'success', summary: 'Turma de formação criada com sucesso!', detail:''});
+        this.messageService.add({
+            severity: "success",
+            summary: "Turma de formação criada com sucesso!",
+            detail: "",
+        });
     }
 
     public verificaId() {
@@ -157,7 +193,6 @@ export class TurmaFormacaoFormComponent implements OnInit {
         }
         this.updateTurmaFormacao();
     }
-
 
     public addCompetenciaColaborador() {
         const campoCompetenciaColaboradorList: CompetenciaColaboradorModel[] =
@@ -170,15 +205,19 @@ export class TurmaFormacaoFormComponent implements OnInit {
                 idCompetenciaSelecionada
             );
         campoCompetenciaColaboradorList.push(colaboradorCompetencia);
-        console.log(campoCompetenciaColaboradorList)
+        console.log(campoCompetenciaColaboradorList);
     }
 
-    public removerCompetenciaColaborador(idColab: number, idComp: number): void {
+    public removerCompetenciaColaborador(
+        idColab: number,
+        idComp: number
+    ): void {
         const campoCompetenciaColaboradorList: CompetenciaColaboradorModel[] =
             this.turmaFormacaoForm.get("competenciasColaboradores").value;
 
         const index = campoCompetenciaColaboradorList.findIndex(
-            ({ idColaborador, idCompetencia }) => idColaborador === idColab && idCompetencia === idComp
+            ({ idColaborador, idCompetencia }) =>
+                idColaborador === idColab && idCompetencia === idComp
         );
         campoCompetenciaColaboradorList.splice(index, 1);
     }
@@ -220,14 +259,17 @@ export class TurmaFormacaoFormComponent implements OnInit {
         }));
     }
 
-    verificaValidacao(campo){
-        return this.turmaFormacaoForm.get(campo).valid && this.turmaFormacaoForm.get(campo).touched;
+    verificaValidacao(campo) {
+        return (
+            this.turmaFormacaoForm.get(campo).valid &&
+            this.turmaFormacaoForm.get(campo).touched
+        );
     }
 
-    erroCss(campo){
-        return{
-            'has-error': this.verificaValidacao(campo),
-            'has-feedback': this.verificaValidacao(campo)
-        }
+    erroCss(campo) {
+        return {
+            "has-error": this.verificaValidacao(campo),
+            "has-feedback": this.verificaValidacao(campo),
+        };
     }
 }

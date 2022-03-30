@@ -26,9 +26,7 @@ public class TurmaFormacaoService {
     private final TurmaFormacaoRepository turmaFormacaoRepository;
     private final TurmaFormacaoMapper mapper;
     private final TurmaFormacaoListaMapper mapperLista;
-    private final CompetenciaColaboradorMapper competenciaColaboradorMapper;
     private final TurmaFormacaoCompetenciaColaboradorRepository turmaFormacaoCompetenciaColaboradorRepository;
-    private final StatusRepository statusRepository;
 
     public List<TurmaFormacaoListaDTO> listar() {
         return mapperLista.toDTO(turmaFormacaoRepository.findAll());
@@ -129,10 +127,6 @@ public class TurmaFormacaoService {
                 turmaFormacaoRepository.save(turmaFormacao);
             }
         }
-    }
-
-    public List<DropDownDTO> listarStatusComoDropDown() {
-        return statusRepository.findAllByDropDown();
     }
 
     public Boolean verificaVinculoColaboradorCompetenciaTurma(Long idColaborador, Long idCompetencia) {

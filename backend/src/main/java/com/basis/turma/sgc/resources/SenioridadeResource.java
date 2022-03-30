@@ -3,6 +3,7 @@ package com.basis.turma.sgc.resources;
 
 import com.basis.turma.sgc.repository.SenioridadeRepository;
 import com.basis.turma.sgc.service.SenioridadeService;
+import com.basis.turma.sgc.service.dto.DropDownDTO;
 import com.basis.turma.sgc.service.dto.SenioridadeDTO;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -22,9 +23,15 @@ public class SenioridadeResource {
     private final SenioridadeService service;
 
     @GetMapping
-    public ResponseEntity<List<SenioridadeDTO>> listar(){
+    public ResponseEntity<List<SenioridadeDTO>> listar() {
         List<SenioridadeDTO> senioridadeDTO = service.listar();
         return ResponseEntity.ok(senioridadeDTO);
+    }
+
+    @GetMapping("/dropdown")
+    public ResponseEntity<List<DropDownDTO>> listarSenioridadeDropDown() {
+        List<DropDownDTO> dropDownDTO = service.listarSenioridadeComoDropDown();
+        return ResponseEntity.ok().body(dropDownDTO);
     }
 
 }

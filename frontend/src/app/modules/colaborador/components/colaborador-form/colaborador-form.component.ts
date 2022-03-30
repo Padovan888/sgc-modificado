@@ -1,3 +1,4 @@
+import { DomSanitizer } from "@angular/platform-browser";
 import { TurmaFormacaoService } from "./../../../turma-formacao/services/turma-formacao.service";
 import { CompetenciaColaboradorModel } from "./../../../turma-formacao/models/competencia-colaborador.model";
 import { Validacoes } from "./../../models/Validacoes.model";
@@ -33,11 +34,15 @@ export class ColaboradorFormComponent implements OnInit {
     competencia: CompetenciaModel[] = [];
     opcoesCompetencia: SelectItem[];
     competenciaSelecionada: CompetenciaModel;
+    competencias: SelectItem[] = [];
     nivelSelecionado: CategoriaModel;
     senioridadeSelecionada: CategoriaModel;
+    senioridades: SelectItem[] = []
     titleModal = true;
     competenciaColaborador: CompetenciaColaboradorModel[] = [];
     competenciaColaboradorBoolean: Boolean;
+    image;
+    file: FileReader = new FileReader();
 
     public isVisualizar: boolean = true;
 
@@ -53,7 +58,8 @@ export class ColaboradorFormComponent implements OnInit {
         private senioridadeService: SenioridadeService,
         public activatedRouter: ActivatedRoute,
         private messageService: MessageService,
-        private turmaFormacaoService: TurmaFormacaoService
+        private turmaFormacaoService: TurmaFormacaoService,
+        private competenciaService: CompetenciaService
     ) {
         this.opcoesCompetencia = [];
     }
@@ -61,7 +67,7 @@ export class ColaboradorFormComponent implements OnInit {
     ngOnInit(): void {
         this.getCompetencia();
         this.getNivel();
-
+        this.getSenioridadeDropDown();
         this.colabForm = this.fb.group({
             id: [null],
             nome: [
@@ -82,10 +88,11 @@ export class ColaboradorFormComponent implements OnInit {
             ],
             cpf: ["", [Validators.required]],
             email: ["", [Validators.required, Validators.email]],
+            foto: [""],
             dataNascimento: ["", [Validators.required]],
             dataAdmissao: ["", [Validators.required]],
             idSenioridade: ["", [Validators.required]],
-            competenciasList: [[], [Validators.required]],
+            competenciasList: [[]],
         });
         if (!!this.colaboradorEditado) {
             this.titleModal = false;
@@ -165,6 +172,28 @@ export class ColaboradorFormComponent implements OnInit {
                 console.log("Erro", error);
             }
         );
+    }
+
+    getSenioridadeDropDown() {
+        this.senioridadeService.getSenioridadeDropDrown().subscribe(
+            (data) => {
+                this.senioridades = data;
+            },
+            (error) => {
+                console.error("Erro: ", error);
+            }
+        )
+    }
+
+    getCompetenciaComoDropDown() {
+        this.competenciaService.listarCompetenciaComoDropDown().subscribe(
+            (data) => {
+                this.competencias = data;
+            },
+            (error) => {
+                console.error("Erro: ", error);
+            }
+        )
     }
 
     converterParaDropDown(n: any[], valor: string, nome: string): SelectItem[] {
@@ -284,4 +313,21 @@ export class ColaboradorFormComponent implements OnInit {
                 }
             );
     }
+
+    converterFotoParaString() {
+        this.colabForm.get("foto").setValue(btoa(this.file.result.toString()));
+    }
+
+    subirImagem(event) {
+        this.colabForm.get("foto").setValue(event.currentFiles[0].objectURL);
+        this.file.readAsBinaryString(event.currentFiles[0]);
+        this.file.onload = () => this.converterFotoParaString();
+    }
+
+    mostraImagem() {
+        let montandoBase64 = "data:image/png;base64,";
+
+        return montandoBase64 + this.colabForm.get("foto").value;
+    }
+
 }

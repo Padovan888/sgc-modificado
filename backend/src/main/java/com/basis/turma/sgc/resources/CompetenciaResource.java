@@ -4,6 +4,7 @@ import com.basis.turma.sgc.domain.Competencia;
 import com.basis.turma.sgc.service.dto.CompetenciaDTO;
 import com.basis.turma.sgc.service.CompetenciaService;
 import com.basis.turma.sgc.service.dto.CompetenciaListaDTO;
+import com.basis.turma.sgc.service.dto.DropDownDTO;
 import com.basis.turma.sgc.service.dto.TurmaFormacaoDTO;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +51,12 @@ public class CompetenciaResource {
     public ResponseEntity deletar(@PathVariable Long id){
         service.deletar(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Turma de formação deletada!");
+    }
+
+    @GetMapping("/dropdown")
+    public ResponseEntity<List<DropDownDTO>> listarCompetenciaComoDropDown(){
+        List<DropDownDTO> dropDownCompetencia = service.listarCompetenciaComoDropDown();
+        return ResponseEntity.ok().body(dropDownCompetencia);
     }
 
 }

@@ -14,11 +14,11 @@ import java.io.Serializable;
 @AllArgsConstructor
 @Data
 @Embeddable
-//Embeddable representa uma chave primaria composta
 public class IdColaboradorCompetencia implements Serializable {
 
     @Column(name="id_colaborador")
     private Long id_colaborador;
+
     @Column(name="id_competencia")
     private Long id_competencia;
 

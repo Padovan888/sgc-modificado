@@ -1,17 +1,16 @@
 package com.basis.turma.sgc.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
 @Table(name = "colaborador_competencia")
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
 public class ColaboradorCompetencia implements Serializable {
 
     @EmbeddedId
@@ -29,7 +28,5 @@ public class ColaboradorCompetencia implements Serializable {
 
     @Column(name = "nivel")
     private Integer nivel;
-
-
 
 }

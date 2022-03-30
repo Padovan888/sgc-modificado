@@ -9,8 +9,9 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface StatusRepository extends JpaRepository<Status,Long> {
-    @Query("select new com.basis.turma.sgc.service.dto.DropDownDTO(s.id,s.descricao) " +
-            "from Status s")
+public interface StatusRepository extends JpaRepository<Status, Long> {
+
+    @Query("select new com.basis.turma.sgc.service.dto.DropDownDTO(s.id,s.descricao) from Status s")
     List<DropDownDTO> findAllByDropDown();
+
 }

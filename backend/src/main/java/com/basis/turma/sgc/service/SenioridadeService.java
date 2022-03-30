@@ -2,6 +2,7 @@ package com.basis.turma.sgc.service;
 
 
 import com.basis.turma.sgc.repository.SenioridadeRepository;
+import com.basis.turma.sgc.service.dto.DropDownDTO;
 import com.basis.turma.sgc.service.dto.SenioridadeDTO;
 import com.basis.turma.sgc.service.mapper.SenioridadeMapper;
 import lombok.RequiredArgsConstructor;
@@ -18,8 +19,12 @@ public class SenioridadeService {
     private final SenioridadeRepository repository;
     private final SenioridadeMapper mapper;
 
-    public List<SenioridadeDTO> listar(){
+    public List<SenioridadeDTO> listar() {
         return mapper.toDTO(repository.findAll());
+    }
+
+    public List<DropDownDTO> listarSenioridadeComoDropDown() {
+        return repository.findAllByDropDown();
     }
 
 }

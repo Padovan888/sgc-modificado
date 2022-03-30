@@ -1,3 +1,4 @@
+import { SelectItem } from 'primeng/api';
 import { Observable } from "rxjs";
 import { environment } from "./../../../../environments/environment";
 import { HttpClient } from "@angular/common/http";
@@ -8,11 +9,16 @@ import { StatusModel } from "../models/status.model";
     providedIn: "root",
 })
 export class StatusService {
-    constructor(private http: HttpClient) {}
+    constructor(private http: HttpClient) { }
 
     protected UrlService: string = environment.apiUrl;
 
-    public getStatus(): Observable<StatusModel[]> {
+    getStatus(): Observable<StatusModel[]> {
         return this.http.get<StatusModel[]>(this.UrlService + "/status");
     }
+
+    getStatusComoDropDown(): Observable<SelectItem[]> {
+        return this.http.get<SelectItem[]>(this.UrlService + "/status/dropdown");
+    }
+
 }

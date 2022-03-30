@@ -5,6 +5,7 @@ export class ColaboradorModel {
     sobrenome: string;
     cpf: string;
     email: string;
+    foto: string;
     dataNascimento: Date;
     dataAdmissao: Date;
     idSenioridade: number;

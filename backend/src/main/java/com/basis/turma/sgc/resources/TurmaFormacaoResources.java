@@ -51,11 +51,6 @@ public class TurmaFormacaoResources {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Turma de formação deletada!");
     }
 
-    @GetMapping("/status/dropdown")
-    public ResponseEntity<List<DropDownDTO>> listarStatusDropDown() {
-        return new ResponseEntity<>(turmaFormacaoService.listarStatusComoDropDown(), HttpStatus.OK);
-    }
-
     @GetMapping("/associado/{idColaborador}/{idCompetencia}")
     public ResponseEntity<Boolean> verificaVinculoColaboradorCompetenciaTurma(@PathVariable Long idColaborador, @PathVariable Long idCompetencia) {
         Boolean competenciaPresente = turmaFormacaoService.verificaVinculoColaboradorCompetenciaTurma(idColaborador, idCompetencia);

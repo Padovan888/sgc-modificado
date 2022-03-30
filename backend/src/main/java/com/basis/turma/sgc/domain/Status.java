@@ -1,22 +1,22 @@
 package com.basis.turma.sgc.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
 @Table(name="status")
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
 public class Status implements Serializable {
 
     @Id
     @Column(name="id")
     private Long id;
+
     @Column(name="descricao")
     private String descricao;
 

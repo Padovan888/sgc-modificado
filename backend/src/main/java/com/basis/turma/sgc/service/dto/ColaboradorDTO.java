@@ -1,6 +1,8 @@
 package com.basis.turma.sgc.service.dto;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.br.CPF;
 
@@ -10,7 +12,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 public class ColaboradorDTO implements Serializable {
     public Long id;
 
@@ -31,7 +34,7 @@ public class ColaboradorDTO implements Serializable {
     @Email (message = "O campo email deve ser válido!")
     public String email;
 
-    private String foto;
+    private byte[] foto;
 
     @NotNull(message = "O campo data de nascimento não pode ser nulo!")
     @PastOrPresent(message = "O campo data de nascimento deve ser válido!")

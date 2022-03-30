@@ -12,6 +12,7 @@ import java.util.Optional;
 
 @Repository
 public interface TurmaFormacaoCompetenciaColaboradorRepository extends JpaRepository<TurmaFormacaoCompetenciaColaborador, IdTurmaFormacaoCompetenciaColaborador> {
+
     void deleteAllByTurmaFormacaoId(Long id);
 
     List<TurmaFormacaoCompetenciaColaborador> findAllByColaboradorIdAndCompetenciaId(Long colaboradorId, Long competenciaId);
@@ -25,4 +26,5 @@ public interface TurmaFormacaoCompetenciaColaboradorRepository extends JpaReposi
                                                 @Param("idCompetencia") Long idCompetencia);
 
     Optional<TurmaFormacaoCompetenciaColaborador> findFirstByCompetenciaIdAndColaboradorId(Long idColaborador, Long idCompetencia);
+
 }
